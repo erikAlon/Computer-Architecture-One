@@ -69,7 +69,6 @@ class CPU {
     // right now.)
 
     // !!! IMPLEMENT ME
-    let IR = this.PC;
 
     // Debugging output
     console.log(`${this.PC}: ${IR.toString(2)}`);
@@ -78,8 +77,6 @@ class CPU {
     // needs them.
 
     // !!! IMPLEMENT ME
-    let opcode1 = this.PC + 1;
-    let opcode2 = this.PC + 2;
 
     // Execute the instruction. Perform the actions for the instruction as
     // outlined in the LS-8 spec.
@@ -92,6 +89,28 @@ class CPU {
     // for any particular instruction.
 
     // !!! IMPLEMENT ME
+    const HLT = "00000001";
+    const LDI = "10011001";
+    const PRN = "01000011";
+
+    let IR = this.PC;
+    let operandA = this.ram.read(IR + 1);
+    let operandB = this.ram.read(IR + 2);
+
+    switch (this.ram.read(IR)) {
+      case HLT:
+        this.stopClock();
+        break;
+      case LDI:
+        return (this.reg[operandA] = operandB);
+        break;
+      case PRN:
+        console.log(this.reg[0]);
+        break;
+      default:
+        console.log("\n\n***\nYou dun goofed if this gets logged\n***\n\n");
+    }
+    this.PC = PC++;
   }
 }
 
